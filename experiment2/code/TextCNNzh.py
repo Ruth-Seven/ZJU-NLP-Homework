@@ -6,31 +6,34 @@ import numpy as np
 
 
 class Config(object):
-
     """配置参数"""
+
     def __init__(self, dataset):
         self.model_name = 'TextCNN'
         self.train_path = dataset + '/data/train.txt'                                # 训练集
         self.dev_path = dataset + '/data/dev.txt'                                    # 验证集
         self.test_path = dataset + '/data/test.txt'                                  # 测试集
-        self.word_vectors_path = dataset + '/data/word_vectors.pkl'
+        self.word_vectors_path = dataset + '/data/word_vectors.pkl'                  # 预训练词向量
         self.class_list = [x.strip() for x in open(
             dataset + '/data/class.txt', encoding='utf-8').readlines()]              # 类别名单
         self.vocab_path = dataset + '/data/vocab.pkl'                                # 词表
         self.save_path = dataset + '/saved_dict/' + self.model_name + '.ckpt'        # 模型训练结果
-        self.log_path = dataset + '/log/' + self.model_name
-        self.embedding_pretrained = None                   # 预训练词向量
+        self.log_path = dataset + '/log/' + self.model_name                          # log保存地址
+        self.embedding_pretrained = None                                             # 预训练词向量
         self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')   # 设备
-        self.sen_len = 600
-        self.language = 'en' if dataset == './aclImdb' else 'zh'
+        self.sen_len = 600                                                           # 句子长度
+        self.language = 'zh'                                                          # 数据集选择
         self.dropout = 0.5                                              # 随机失活
+        self.weight_decay = 0.01  # 设置weight_decay
+        self.set_L2 = True  # 设置L2
+        self.set_L1 = False  # 设置L1
         self.require_improvement = 1000                                 # 若超过1000batch效果还没提升，则提前结束训练
         self.num_classes = len(self.class_list)                         # 类别数
         self.num_epochs = 20                                            # epoch数
         self.batch_size = 128                                           # mini-batch大小
         self.pad_size = 32                                              # 每句话处理成的长度(短填长切)
         self.learning_rate = 1e-3                                       # 学习率
-        self.embed = None            # 字向量维度
+        self.embed = None                                               # 字向量维度
         self.filter_sizes = (2, 3, 4)                                   # 卷积核尺寸
         self.num_filters = 256                                          # 卷积核数量(channels数)
 
@@ -39,9 +42,7 @@ class Config(object):
         self.embed = self.embedding_pretrained.size(1)
 
 
-'''Convolutional Neural Networks for Sentence Classification'''
-
-
+# 改编自经典TextCNN model
 class Model(nn.Module):
     def __init__(self, config):
         super(Model, self).__init__()
