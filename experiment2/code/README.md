@@ -16,7 +16,7 @@ IDE：Pycharm 2020.2
 
 ### 二、目录结构
 
-zju-nlp-hw2
+data
 
 ​		-THUCNews
 
@@ -41,7 +41,7 @@ zju-nlp-hw2
 
 -------
 
-按目录结构，将下载到的**aclImdb与THUCNews**解压放在zju-nlp-hw2目录下即可。
+按目录结构，将下载到的**aclImdb与THUCNews**解压放在`data`目录下即可。
 
 ### 四、运行
 
@@ -49,21 +49,8 @@ zju-nlp-hw2
 
 ```bash
 python run.py --language zh
-```
-
-![](https://github.com/iDestro/zju-nlp-hw2/blob/main/result/zh_result.png?raw=true)
-
-
-
-#### 4.2训练英文数据集
-
-```bash
 python run.py --language en
 ```
-
-![](https://github.com/iDestro/zju-nlp-hw2/blob/main/result/en_result.png?raw=true)
-
-
 
 
 
