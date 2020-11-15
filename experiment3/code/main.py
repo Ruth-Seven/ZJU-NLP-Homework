@@ -43,11 +43,8 @@ def arg_parse():
     return parser.parse_args()
 
 
-def main(dataset, model):
+def main():
     args = arg_parse()
-    args.dataset = dataset
-    args.model_type = model
-
     path = Path("../data")
     if args.dataset == 'cora':
         dataset = Planetoid(root=path / 'Cora', name='Cora', split='random', num_train_per_class=77)

@@ -16,39 +16,7 @@ import torch_geometric.nn as pyg_nn
 import models
 import utils
 
-
-def arg_parse():
-    parser = argparse.ArgumentParser(description='GNN arguments.')
-    utils.parse_optimizer(parser)
-
-    parser.add_argument('--model_type', type=str,
-                        help='Type of GNN model.')
-    parser.add_argument('--batch_size', type=int,
-                        help='Training batch size')
-    parser.add_argument('--num_layers', type=int,
-                        help='Number of graph conv layers')
-    parser.add_argument('--hidden_dim', type=int,
-                        help='Training hidden size')
-    parser.add_argument('--dropout', type=float,
-                        help='Dropout rate')
-    parser.add_argument('--epochs', type=int,
-                        help='Number of training epochs')
-    parser.add_argument('--dataset', type=str,
-                        help='Dataset')
-
-    parser.set_defaults(model_type='GCN',
-                        dataset='cora',
-                        num_layers=2,
-                        batch_size=32,
-                        hidden_dim=32,
-                        dropout=0.0,
-                        epochs=200,
-                        opt='adam',   # opt_parser
-                        opt_scheduler='none',
-                        weight_decay=0.0,
-                        lr=0.01)
-
-    return parser.parse_args()
+# from torch.utils.data import dataloader.DataLoader
 
 def train(dataset, task, args):
     if task == 'graph':
@@ -89,7 +57,7 @@ def train(dataset, task, args):
 
         if epoch % 10 == 0:
             test_acc = test(loader, model)
-            print(test_acc,   '  test')
+            print('  test Acc: ', test_acc)
 
 def test(loader, model, is_validation=False):
     model.eval()
@@ -116,18 +84,3 @@ def test(loader, model, is_validation=False):
         for data in loader.dataset:
             total += torch.sum(data.test_mask).item()
     return correct / total
-
-def main():
-    args = arg_parse()
-
-    if args.dataset == 'enzymes':
-        dataset = TUDataset(root='/tmp/ENZYMES', name='ENZYMES')
-        task = 'graph'
-    elif args.dataset == 'cora':
-        dataset = Planetoid(root='/tmp/Cora', name='Cora')
-        task = 'node'
-    train(dataset, task, args) 
-
-if __name__ == '__main__':
-    main()
-
